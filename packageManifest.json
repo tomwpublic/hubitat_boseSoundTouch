@@ -10,12 +10,11 @@
       "name": "Bose SoundTouch Discovery",
       "namespace": "tomw",
       "location": "https://raw.githubusercontent.com/tomwpublic/hubitat_boseSoundTouch/master/boseSoundTouchDiscovery",
-			"required": false,
-			"oauth": false
+      "required": false,
+      "oauth": false
     }
-	],
+  ],
   "drivers": [
-    
     {
       "id": "d4c86b84-9f12-47a2-b04f-60ce5c294c10",
       "name": "Bose SoundTouch Device",
