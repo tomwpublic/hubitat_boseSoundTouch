@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "minimumHEVersion": "2.1.9",
   "dateReleased": "2020-09-14",
-  "apps" : [
+  "apps": [
     {
       "id": "4be7583a-2bba-4a36-9c5e-52ae3dd83c18",
       "name": "Bose SoundTouch Discovery",
