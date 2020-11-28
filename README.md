@@ -1,4 +1,4 @@
-# hubitat_bose
+# hubitat_boseSoundTouch
 
 This provides AudioVolume, MusicPlayer, and SpeechSynthesis driver capabilities as well as various functionality using PushableButton.
 
