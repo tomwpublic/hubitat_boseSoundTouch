@@ -1,0 +1,31 @@
+{
+  "packageName": "hubitat_boseSoundTouch",
+  "author": "tomw",
+  "version": "1.0.0",
+  "minimumHEVersion": "2.1.9",
+  "dateReleased": "2020-09-14",
+  "apps" : [
+    {
+      "id": "4be7583a-2bba-4a36-9c5e-52ae3dd83c18",
+      "name": "Bose SoundTouch Discovery",
+      "namespace": "tomw",
+      "location": "https://raw.githubusercontent.com/tomwpublic/hubitat_boseSoundTouch/master/boseSoundTouchDiscovery",
+			"required": false,
+			"oauth": false
+    }
+	],
+  "drivers": [
+    
+    {
+      "id": "d4c86b84-9f12-47a2-b04f-60ce5c294c10",
+      "name": "Bose SoundTouch Device",
+      "namespace": "tomw",
+      "location": "https://raw.githubusercontent.com/tomwpublic/hubitat_boseSoundTouch/master/boseSoundTouchDevice",
+      "required": true
+    }
+  ],
+  "licenseFile": "https://raw.githubusercontent.com/tomwpublic/hubitat_boseSoundTouch/master/LICENSE",
+  "releaseNotes": "1.0.0 - @tomw - Initial release.",
+  "documentationLink": "https://github.com/tomwpublic/hubitat_boseSoundTouch/blob/master/README.md",
+  "communityLink": "https://community.hubitat.com/t/bose-soundtouch-support/17549/8"
+}
