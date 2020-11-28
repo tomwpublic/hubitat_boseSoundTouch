@@ -19,7 +19,7 @@ limitations under the License.
 import groovy.transform.Field
 
 definition(
-    name: "Bose SoundTouch discovery",
+    name: "Bose SoundTouch Discovery",
     namespace: "tomw",
     author: "tomw",
     description: "",
