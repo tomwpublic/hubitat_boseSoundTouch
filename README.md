@@ -43,3 +43,8 @@ You can read the *zoneMap* entry in *State Variables* on the Device page to read
 This attribute contains an HTML-formatted image display of the album art for the track or playlist, if available.  You can use an Attribute tile on your Dashboard to display the image. 
 
 
+# Disclaimer
+
+I have no affiliation with any of the companies mentioned in this readme or in the code.
+
+
