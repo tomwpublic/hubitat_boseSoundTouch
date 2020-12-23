@@ -10,6 +10,8 @@ Most operations are local only, especially playback controls like play/pause/sto
 * In the *Apps Code* section of Hubitat, add the boseSoundTouchDiscovery app.
 * For automated discovery, go to the *Apps* section of Hubitat and use *Add User App* to install and configure the Bose SoundTouch Discovery app.  This will create *Device* entries for each speaker.  Note that this discovery method has been unreliable on some systems, so reboot your Bose speakers if they are not discovered.  If it fails completely, use the manual configuration option.
 * For manual configuration, visit the *Devices* section of Hubitat and *Add Virtual Device(s)* of type Bose SoundTouch Device.  Enter your speaker's IP address and click *Save Preferences.*
+* For TTS operations, acquire a Consumer Key by registering an app on this site:  https://developer.bose.com/user/me/apps
+    * Note that Bose currently only supports notifications (used for TTS) on these models:  SoundTouch 10, SoundTouch 20 Series III, and SoundTouch 30 Series III
 
 # Usage instructions:
 
