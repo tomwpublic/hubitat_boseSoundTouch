@@ -353,7 +353,7 @@ def play()
 
 def playText(text)
 {
-    postPlayInfoObject(textToSpeech(text, "Joanna").uri)
+    postPlayInfoObject(textToSpeech(text).uri)
 }
 
 def playTrack(trackuri)
