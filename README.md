@@ -15,7 +15,7 @@ Most operations are local only, especially playback controls like play/pause/sto
 
 * **Background information**
 
-The *Device* entry for a speaker allows it to be controlled independently and also allows it to act as a the master for its zone.  The Bose SoundTouch Device driver caches information about known slaves.
+The *Device* entry for a speaker allows it to be controlled independently and also allows it to act as a master for its zone.  The Bose SoundTouch Device driver caches information about known slaves.
 
 In order for the user-friendly features described below to work, a given slave has to be added at least once after the *Device* creation in Hubitat.  You can accomplish this by creating a group in the SoundTouch app or by using the *addZoneSlave* or *createZone* (either is fine) commands in the driver.
 <br><br>
