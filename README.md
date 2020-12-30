@@ -1,6 +1,6 @@
 # hubitat_boseSoundTouch
 
-This provides AudioVolume, MusicPlayer, and SpeechSynthesis driver capabilities as well as various functionality using PushableButton.
+This provides AudioNotification, AudioVolume, MusicPlayer, and SpeechSynthesis driver capabilities as well as various functionality using PushableButton.
 
 Most operations are local only, especially playback controls like play/pause/stop and volume controls.  However, most of the functions that initiate or change playback (including TTS) do have a cloud interaction.
 
