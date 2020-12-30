@@ -18,7 +18,7 @@ limitations under the License.
 
 Change history:
 
-1.0.1 - @tomw - Added captureContentItem feature for additional user presets.  Added AudioNotification capability support.
+1.1.0 - @tomw - Added captureContentItem feature for additional user presets.  Added AudioNotification capability support.
 1.0.0 - @tomw - Initial release
 
  */
