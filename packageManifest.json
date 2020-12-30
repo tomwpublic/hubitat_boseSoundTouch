@@ -24,7 +24,7 @@
     }
   ],
   "licenseFile": "https://raw.githubusercontent.com/tomwpublic/hubitat_boseSoundTouch/master/LICENSE",
-  "releaseNotes": "1.0.0 - @tomw - Initial release.",
+  "releaseNotes": "1.1.0 - @tomw - Added captureContentItem feature for additional user presets.  Added AudioNotification capability support.\n1.0.0 - @tomw - Initial release.",
   "documentationLink": "https://github.com/tomwpublic/hubitat_boseSoundTouch/blob/master/README.md",
   "communityLink": "https://community.hubitat.com/t/bose-soundtouch-support/17549/8"
 }

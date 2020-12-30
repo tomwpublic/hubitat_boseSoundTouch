@@ -1,6 +1,6 @@
 # hubitat_boseSoundTouch
 
-This provides AudioVolume, MusicPlayer, and SpeechSynthesis driver capabilities as well as various functionality using PushableButton.
+This provides AudioNotification, AudioVolume, MusicPlayer, and SpeechSynthesis driver capabilities as well as various functionality using PushableButton.
 
 Most operations are local only, especially playback controls like play/pause/stop and volume controls.  However, most of the functions that initiate or change playback (including TTS) do have a cloud interaction.
 
@@ -27,10 +27,10 @@ In order for the user-friendly features described below to work, a given slave h
 
 The Push command is versatile:
 * Pushing button numbers 1 through 6 will perform the same function as pushing the physical buttons on the SoundTouch device, for example restoring saved presets.
-* Pushing button numbers 10 through 20 will restore zones captured using the driver. (note: range of zone numbers is configurable in the configure() function within the driver code)
+* Pushing button numbers 10 through 20 will restore zones captured using the driver (note: range of zone numbers is configurable in the configure() function within the driver code)
+* Pushing button numbers 30 through 40 will restore content items captured using the driver (note: range of item numbers is configurable in the configure() function within the driver code).
 * Pushing a button with a string 'number' (e.g. Kitchen) will attempt to add or remove from the zone a slave of that name.
 <br><br>
-
 
 * **captureZone command**
 
@@ -39,6 +39,12 @@ Use this command to capture the current zone configuration and store it into a n
 You can read the *zoneMap* entry in *State Variables* on the Device page to read the saved zone information.  You can replace an existing saved zone by executing captureZone again with the same number.
 <br><br>
 
+* **captureContentItem command**
+
+Use this command to capture the current content item and store it into a numbered zone in the range of 30 to 40.  Check for *isPresetable* flag to be *true* in *trackData* to determine whether this will work for a given content item.  Use *Push* with the number to restore the content item at any time.
+
+You can read the *itemMap* entry in *State Variables* on the Device page to read the saved content item information.  You can replace an existing saved item by executing captureContentItem again with the same number.
+<br><br>
 
 * **trackArt attribute**
 

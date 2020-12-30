@@ -14,12 +14,20 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
+-------------------------------------------
+
+Change history:
+
+1.1.0 - @tomw - Added captureContentItem feature for additional user presets.  Added AudioNotification capability support.
+1.0.0 - @tomw - Initial release
+
  */
 
 metadata
 {
     definition(name: "Bose SoundTouch Device", namespace: "tomw", author: "tomw", importUrl: "")
     {
+        capability "AudioNotification"
         capability "AudioVolume"
         capability "PushableButton"
         capability "Configuration"
@@ -35,6 +43,8 @@ metadata
         command "addZoneSlave", ["slaveIP", "slaveMAC"]
         command "removeZoneSlave", ["slaveIP", "slaveMAC"]
         command "captureZone", ["zoneNumber"]
+        
+        command "captureContentItem", ["itemNumber"]
         
         attribute "commStatus", "string"
         attribute "zoneRole", "string"
@@ -125,11 +135,13 @@ def configure()
     state.clear()    
     state.macaddr = info.@deviceID.toString()
     
-    // define the range of zone numbers for captureZone.
+    // define the range of zone numbers for captureZone and captureContentItem.
     // note that 1 through 6 are reserved to emulate physical
     //  buttons on the device.  be sure to reserve more if necessary
     state.zoneNumMin = 10
     state.zoneNumMax = 20
+    state.itemNumMin = 30
+    state.itemNumMax = 40
     
     initialize()
 }
@@ -353,7 +365,12 @@ def play()
 
 def playText(text)
 {
-    postPlayInfoObject(textToSpeech(text).uri)
+    playText(text, 70)
+}
+
+def playText(text, volumelevel)
+{
+    postPlayInfoObject(textToSpeech(text).uri, (volumelevel.toInteger() < 10) ? "10" : (volumelevel.toInteger() > 70) ? "70" : volumelevel)
 }
 
 def playTrack(trackuri)
@@ -385,6 +402,33 @@ def setTrack(trackuri)
 def stop()
 {
     operateKey("press", "PAUSE")
+}
+
+def playTextAndRestore(text, volumelevel)
+{
+    playText(text, volumelevel)
+}
+
+def playTextAndResume(text, volumelevel)
+{
+    playText(text, volumelevel)
+}
+
+def playTrack(trackuri, volumelevel)
+{
+    setTrack(trackuri)
+    setVolume(volumelevel)
+    play()
+}
+
+def playTrackAndRestore(trackuri, volumelevel)
+{
+    playTrack(trackuri, volumelevel)
+}
+
+def playTrackAndResume(trackuri, volumelevel)
+{
+    playTrack(trackuri, volumelevel)
 }
 
 def on()
@@ -438,7 +482,9 @@ def push(button)
             logDebug("number button - ${button.toString().toInteger()}")
         
             def zoneNumMin = (state.zoneNumMin ? state.zoneNumMin.toInteger() : 10)
-            def zoneNumMax = (state.zoneNumMax ? state.zoneNumMax.toInteger() : 20)        
+            def zoneNumMax = (state.zoneNumMax ? state.zoneNumMax.toInteger() : 20)
+            def itemNumMin = (state.itemNumMin ? state.itemNumMin.toInteger() : 30)
+            def itemNumMax = (state.itemNumMax ? state.itemNumMax.toInteger() : 40)   
         
             switch(button.toString().toInteger())
             {
@@ -450,6 +496,10 @@ def push(button)
                 case zoneNumMin..zoneNumMax:
                     // treat this range as saved zone configs and restore the zone, if it exists
                     restoreZoneMulti(button.toString().toInteger())
+                    break
+                case itemNumMin..itemNumMax:                
+                    // treat this range as saved content items and restore the item, if it exists
+                    restoreContentItem(button.toString().toInteger())                    
                     break
                 default:
                     logDebug("unknown button number")
@@ -616,21 +666,21 @@ def captureZone(zoneNumber)
 {
     inspectZone()
     def zMC = getZoneMapCur()
-    logDebug("captureZone(${zoneNumber}): incoming zoneMapCur = ${zMC}")    
+    logDebug("captureZone(${zoneNumber}): incoming zoneMapCur = ${zMC}")
     
     if(!zoneNumber.isInteger())
     {
-        log.debug "captureZone() Invalid zone number.  Must be in range of 10-19, inclusive."
+        log.debug "captureZone() failed: zoneNumber must be numeric"
         return
     }
     
     def zoneNumInt = zoneNumber.toInteger()
     def zoneNumMin = (state.zoneNumMin ? state.zoneNumMin.toInteger() : 10)
-    def zoneNumMax = (state.zoneNumMax ? state.zoneNumMax.toInteger() : 20) 
+    def zoneNumMax = (state.zoneNumMax ? state.zoneNumMax.toInteger() : 20)
     
     if((zoneNumInt < zoneNumMin) || (zoneNumInt > zoneNumMax))
     {
-        log.debug "captureZone() Invalid zone number.  Must be in range of ${zoneNumMin}-${zoneNumMax}, inclusive."
+        log.debug "captureZone() failed: zoneNumber must be in range of ${zoneNumMin}-${zoneNumMax}, inclusive."
         return
     }
     
@@ -639,6 +689,48 @@ def captureZone(zoneNumber)
         state.zoneMap = state.zoneMap ?: [:]
         state.zoneMap[zoneNumber] = zMC
     }
+}
+
+def captureContentItem(itemNumber)
+{
+    def np = readNowPlaying(false)
+    
+    if(null == np)
+    {
+        return
+    }
+    
+    logDebug("captureContentItem(${itemNumber}): incoming np = ${np}")
+    
+    if(!itemNumber.isInteger())
+    {
+        log.debug "captureContentItem() failed: itemNumber must be numeric"
+        return
+    }
+    
+    def itemNumInt = itemNumber.toInteger()
+    def itemNumMin = (state.itemNumMin ? state.itemNumMin.toInteger() : 30)
+    def itemNumMax = (state.itemNumMax ? state.itemNumMax.toInteger() : 40)
+    
+    if((itemNumInt < itemNumMin) || (itemNumInt > itemNumMax))
+    {
+        log.debug "captureContentItem() failed: itemNumber must be in range of ${itemNumMin}-${itemNumMax}, inclusive."
+        return
+    }
+    
+    if(checkCommStatus())
+    {
+        state.itemMap = state.itemMap ?: [:]
+        state.itemMap[itemNumber] = serializeXml(np.ContentItem)
+    }
+}
+
+def restoreContentItem(itemNumber)
+{
+    if(state.itemMap?.containsKey(itemNumber.toString()))
+    {
+        playTrack(state.itemMap[itemNumber.toString()])
+    }      
 }
 
 def emptyZone()
@@ -714,7 +806,7 @@ def buildMemberObject(ipAddr, macAddr)
     return "<member ipaddress=\"${ipAddr}\">${macAddr}</member>\n"
 }
 
-def postPlayInfoObject(url)
+def postPlayInfoObject(url, volume)
 {
     if(null == appKey)
     {
@@ -722,7 +814,7 @@ def postPlayInfoObject(url)
         return
     }
     
-    def body = "<play_info>\n<app_key>${appKey}</app_key>\n<url>${url}</url>\n<service>Device Notification</service>\n<reason></reason>\n<message></message>\n<volume>70</volume>\n</play_info>"
+    def body = "<play_info>\n<app_key>${appKey}</app_key>\n<url>${url}</url>\n<service>Device Notification</service>\n<reason></reason>\n<message></message>\n<volume>${volume}</volume>\n</play_info>"
         
     logDebug("postPlayInfoObject(), payload follows")
     logXml("${body}")
